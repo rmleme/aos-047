@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<definitions xmlns:tns="http://xmlns.oracle.com/Cancelamento" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:plnk="http://schemas.xmlsoap.org/ws/2003/05/partner-link/" xmlns:client="http://xmlns.oracle.com/Cancelamento" name="Cancelamento" targetNamespace="http://xmlns.oracle.com/Cancelamento" xmlns="http://schemas.xmlsoap.org/wsdl/">
+  <plnk:partnerLinkType name="Cancelamento">
+    <plnk:role name="CancelamentoProvider">
+      <plnk:portType name="tns:Cancelamento" />
+    </plnk:role>
+  </plnk:partnerLinkType>
+  <types>
+    <schema attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://xmlns.oracle.com/Cancelamento" xmlns="http://www.w3.org/2001/XMLSchema">
+      <element name="CancelamentoProcessRequest">
+        <complexType>
+          <sequence>
+            <element name="input" type="string" />
+          </sequence>
+        </complexType>
+      </element>
+      <element name="CancelamentoProcessResponse">
+        <complexType>
+          <sequence>
+            <element name="result" type="string" />
+          </sequence>
+        </complexType>
+      </element>
+    </schema>
+  </types>
+  <message name="CancelamentoRequestMessage">
+    <part name="payload" element="client:CancelamentoProcessRequest" />
+  </message>
+  <message name="CancelamentoResponseMessage">
+    <part name="payload" element="client:CancelamentoProcessResponse" />
+  </message>
+  <portType name="Cancelamento">
+    <operation name="process">
+      <input message="client:CancelamentoRequestMessage" />
+      <output message="client:CancelamentoResponseMessage" />
+    </operation>
+  </portType>
+  <binding name="CancelamentoBinding" type="client:Cancelamento">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <operation name="process">
+      <soap:operation soapAction="process" style="document" />
+      <input>
+        <soap:body use="literal" />
+      </input>
+      <output>
+        <soap:body use="literal" />
+      </output>
+    </operation>
+  </binding>
+  <service name="Cancelamento">
+    <port name="CancelamentoPort" binding="client:CancelamentoBinding">
+      <soap:address location="http://rodrigo-pc:9700/orabpel/default/Cancelamento/1.0" />
+    </port>
+  </service>
+</definitions>

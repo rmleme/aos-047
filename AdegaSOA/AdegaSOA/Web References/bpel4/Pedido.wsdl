@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<definitions xmlns:tns="http://xmlns.oracle.com/Pedido" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:plnk="http://schemas.xmlsoap.org/ws/2003/05/partner-link/" xmlns:client="http://xmlns.oracle.com/Pedido" name="Pedido" targetNamespace="http://xmlns.oracle.com/Pedido" xmlns="http://schemas.xmlsoap.org/wsdl/">
+  <plnk:partnerLinkType name="Pedido">
+    <plnk:role name="PedidoProvider">
+      <plnk:portType name="tns:Pedido" />
+    </plnk:role>
+  </plnk:partnerLinkType>
+  <types>
+    <schema attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://xmlns.oracle.com/Pedido" xmlns="http://www.w3.org/2001/XMLSchema">
+      <element name="PedidoProcessRequest">
+        <complexType>
+          <sequence>
+            <element name="vinhos">
+              <complexType>
+                <sequence>
+                  <element maxOccurs="unbounded" name="vinho">
+                    <complexType>
+                      <sequence>
+                        <element name="vinhoId" type="int" />
+                        <element name="qtde" type="int" />
+                      </sequence>
+                    </complexType>
+                  </element>
+                </sequence>
+              </complexType>
+            </element>
+            <element minOccurs="0" name="cnpj" type="string" />
+            <element minOccurs="0" name="senha" type="string" />
+            <element minOccurs="0" name="cpf" type="string" />
+            <element minOccurs="0" name="nomePF" type="string" />
+            <element minOccurs="0" name="cartaoPF" type="string" />
+            <element minOccurs="0" name="enderecoPF" type="string" />
+            <element name="qtdeTotalVinho" type="int" />
+            <element name="valorTotal" type="double" />
+          </sequence>
+        </complexType>
+      </element>
+      <element name="PedidoProcessResponse">
+        <complexType>
+          <sequence>
+            <element name="result" type="string" />
+          </sequence>
+        </complexType>
+      </element>
+    </schema>
+  </types>
+  <message name="PedidoResponseMessage">
+    <part name="payload" element="client:PedidoProcessResponse" />
+  </message>
+  <message name="PedidoRequestMessage">
+    <part name="payload" element="client:PedidoProcessRequest" />
+  </message>
+  <portType name="Pedido">
+    <operation name="process">
+      <input message="client:PedidoRequestMessage" />
+      <output message="client:PedidoResponseMessage" />
+    </operation>
+  </portType>
+  <binding name="PedidoBinding" type="client:Pedido">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <operation name="process">
+      <soap:operation soapAction="process" style="document" />
+      <input>
+        <soap:body use="literal" />
+      </input>
+      <output>
+        <soap:body use="literal" />
+      </output>
+    </operation>
+  </binding>
+  <service name="Pedido">
+    <port name="PedidoPort" binding="client:PedidoBinding">
+      <soap:address location="http://rodrigo-pc:9700/orabpel/default/Pedido/1.0" />
+    </port>
+  </service>
+</definitions>

@@ -1,0 +1,16 @@
+<definitions
+    
+     targetNamespace="http://ipt.br/soa"
+     xmlns="http://schemas.xmlsoap.org/wsdl/"
+     xmlns:tns="http://ipt.br/soa"
+     xmlns:bpws="http://schemas.xmlsoap.org/ws/2003/03/business-process/"
+     xmlns:plnk="http://schemas.xmlsoap.org/ws/2003/05/partner-link/"
+     xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+    >
+    <import namespace="http://ipt.br/soa" location="http://localhost:1709/services/credito.asmx?wsdl"/>
+    <plnk:partnerLinkType name="CreditoSoap_PL">
+        <plnk:role name="CreditoSoap_Role">
+            <plnk:portType name="tns:CreditoSoap"/>
+        </plnk:role>
+    </plnk:partnerLinkType>
+</definitions>

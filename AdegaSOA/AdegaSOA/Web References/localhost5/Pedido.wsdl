@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="http://ipt.br/soa" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" targetNamespace="http://ipt.br/soa" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://ipt.br/soa">
+      <s:element name="ListarPedidos">
+        <s:complexType />
+      </s:element>
+      <s:element name="ListarPedidosResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ListarPedidosResult" type="tns:ArrayOfPedido" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="ArrayOfPedido">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="Pedido" nillable="true" type="tns:Pedido" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="Pedido">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="pedidoId" type="s:int" />
+          <s:element minOccurs="1" maxOccurs="1" name="status" type="tns:StatusPedido" />
+          <s:element minOccurs="1" maxOccurs="1" name="data" type="s:dateTime" />
+          <s:element minOccurs="1" maxOccurs="1" name="qtdeTotalVinho" type="s:int" />
+          <s:element minOccurs="1" maxOccurs="1" name="valorTotal" type="s:double" />
+          <s:element minOccurs="0" maxOccurs="1" name="cnpj" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="cpf" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="nomePF" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="cartaoPF" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="enderecoPF" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:simpleType name="StatusPedido">
+        <s:restriction base="s:string">
+          <s:enumeration value="Estoque" />
+          <s:enumeration value="Transito" />
+          <s:enumeration value="Entregue" />
+        </s:restriction>
+      </s:simpleType>
+      <s:element name="GerarOrderId">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="venda" type="tns:Venda" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="Venda">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="vinhos" type="tns:ArrayOfVinhoSelecionado" />
+          <s:element minOccurs="0" maxOccurs="1" name="cnpj" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="cpf" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="nomePF" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="cartaoPF" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="enderecoPF" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ArrayOfVinhoSelecionado">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="VinhoSelecionado" nillable="true" type="tns:VinhoSelecionado" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="VinhoSelecionado">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="vinhoId" type="s:int" />
+          <s:element minOccurs="1" maxOccurs="1" name="qtde" type="s:int" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="GerarOrderIdResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GerarOrderIdResult" type="tns:Pedido" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ConsultarPedido">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="pedidoId" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ConsultarPedidoResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ConsultarPedidoResult" type="tns:Pedido" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="CancelarPedido">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="pedido" type="tns:Pedido" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="CancelarPedidoResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="CancelarPedidoResult" type="tns:Pedido" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+    </s:schema>
+  </wsdl:types>
+  <wsdl:message name="ListarPedidosSoapIn">
+    <wsdl:part name="parameters" element="tns:ListarPedidos" />
+  </wsdl:message>
+  <wsdl:message name="ListarPedidosSoapOut">
+    <wsdl:part name="parameters" element="tns:ListarPedidosResponse" />
+  </wsdl:message>
+  <wsdl:message name="GerarOrderIdSoapIn">
+    <wsdl:part name="parameters" element="tns:GerarOrderId" />
+  </wsdl:message>
+  <wsdl:message name="GerarOrderIdSoapOut">
+    <wsdl:part name="parameters" element="tns:GerarOrderIdResponse" />
+  </wsdl:message>
+  <wsdl:message name="ConsultarPedidoSoapIn">
+    <wsdl:part name="parameters" element="tns:ConsultarPedido" />
+  </wsdl:message>
+  <wsdl:message name="ConsultarPedidoSoapOut">
+    <wsdl:part name="parameters" element="tns:ConsultarPedidoResponse" />
+  </wsdl:message>
+  <wsdl:message name="CancelarPedidoSoapIn">
+    <wsdl:part name="parameters" element="tns:CancelarPedido" />
+  </wsdl:message>
+  <wsdl:message name="CancelarPedidoSoapOut">
+    <wsdl:part name="parameters" element="tns:CancelarPedidoResponse" />
+  </wsdl:message>
+  <wsdl:portType name="PedidoSoap">
+    <wsdl:operation name="ListarPedidos">
+      <wsdl:input message="tns:ListarPedidosSoapIn" />
+      <wsdl:output message="tns:ListarPedidosSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GerarOrderId">
+      <wsdl:input message="tns:GerarOrderIdSoapIn" />
+      <wsdl:output message="tns:GerarOrderIdSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="ConsultarPedido">
+      <wsdl:input message="tns:ConsultarPedidoSoapIn" />
+      <wsdl:output message="tns:ConsultarPedidoSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="CancelarPedido">
+      <wsdl:input message="tns:CancelarPedidoSoapIn" />
+      <wsdl:output message="tns:CancelarPedidoSoapOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="PedidoSoap" type="tns:PedidoSoap">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="ListarPedidos">
+      <soap:operation soapAction="http://ipt.br/soa/ListarPedidos" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GerarOrderId">
+      <soap:operation soapAction="http://ipt.br/soa/GerarOrderId" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ConsultarPedido">
+      <soap:operation soapAction="http://ipt.br/soa/ConsultarPedido" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CancelarPedido">
+      <soap:operation soapAction="http://ipt.br/soa/CancelarPedido" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="PedidoSoap12" type="tns:PedidoSoap">
+    <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="ListarPedidos">
+      <soap12:operation soapAction="http://ipt.br/soa/ListarPedidos" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GerarOrderId">
+      <soap12:operation soapAction="http://ipt.br/soa/GerarOrderId" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ConsultarPedido">
+      <soap12:operation soapAction="http://ipt.br/soa/ConsultarPedido" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CancelarPedido">
+      <soap12:operation soapAction="http://ipt.br/soa/CancelarPedido" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="Pedido">
+    <wsdl:port name="PedidoSoap" binding="tns:PedidoSoap">
+      <soap:address location="http://localhost:1709/Services/Pedido.asmx" />
+    </wsdl:port>
+    <wsdl:port name="PedidoSoap12" binding="tns:PedidoSoap12">
+      <soap12:address location="http://localhost:1709/Services/Pedido.asmx" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

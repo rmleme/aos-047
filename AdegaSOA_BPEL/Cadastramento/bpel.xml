@@ -1,0 +1,16 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<BPELSuitcase>
+   <BPELProcess id="Cadastramento" src="Cadastramento.bpel">
+      <partnerLinkBindings>
+         <partnerLinkBinding name="client">
+            <property name="wsdlLocation">Cadastramento.wsdl</property>
+         </partnerLinkBinding>
+         <partnerLinkBinding name="CreditoService">
+            <property name="wsdlLocation">CreditoService.wsdl</property>
+         </partnerLinkBinding>
+         <partnerLinkBinding name="UsuarioService">
+            <property name="wsdlLocation">UsuarioService.wsdl</property>
+         </partnerLinkBinding>
+      </partnerLinkBindings>
+   </BPELProcess>
+</BPELSuitcase>

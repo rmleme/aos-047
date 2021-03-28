@@ -1,0 +1,352 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="http://ipt.br/soa" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" targetNamespace="http://ipt.br/soa" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://ipt.br/soa">
+      <s:element name="ListarEstoque">
+        <s:complexType />
+      </s:element>
+      <s:element name="ListarEstoqueResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ListarEstoqueResult" type="tns:ArrayOfVinho" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="ArrayOfVinho">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="Vinho" nillable="true" type="tns:Vinho" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="Vinho">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="vinhoId" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" name="nome" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="tipo" type="tns:TipoVinho" />
+          <s:element minOccurs="1" maxOccurs="1" name="preco" type="s:double" />
+          <s:element minOccurs="1" maxOccurs="1" name="prazo" type="s:int" />
+          <s:element minOccurs="1" maxOccurs="1" name="qtdeAtual" type="s:int" />
+          <s:element minOccurs="1" maxOccurs="1" name="qtdeMinima" type="s:int" />
+        </s:sequence>
+      </s:complexType>
+      <s:simpleType name="TipoVinho">
+        <s:restriction base="s:string">
+          <s:enumeration value="Branco" />
+          <s:enumeration value="Tinto" />
+          <s:enumeration value="Rose" />
+        </s:restriction>
+      </s:simpleType>
+      <s:element name="VerificarEstoque">
+        <s:complexType />
+      </s:element>
+      <s:element name="VerificarEstoqueResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="VerificarEstoqueResult" type="tns:ArrayOfReposicao" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="ArrayOfReposicao">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="Reposicao" nillable="true" type="tns:Reposicao" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="Reposicao">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="vinhoId" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" name="nome" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="tipo" type="tns:TipoVinho" />
+          <s:element minOccurs="1" maxOccurs="1" name="preco" type="s:double" />
+          <s:element minOccurs="1" maxOccurs="1" name="qtdeAtual" type="s:int" />
+          <s:element minOccurs="1" maxOccurs="1" name="qtdeMinima" type="s:int" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="VerificarDemanda">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="listaReposicao" type="tns:ArrayOfReposicao" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="VerificarDemandaResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="VerificarDemandaResult" type="tns:ArrayOfReposicao" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="SolicitarReposicao">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="listaReposicao" type="tns:ArrayOfReposicao" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="SolicitarReposicaoResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="SolicitarReposicaoResult" type="tns:ArrayOfReposicao" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="EnviarArquivoXml">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="listaReposicao" type="tns:ArrayOfReposicao" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="EnviarArquivoXmlResponse">
+        <s:complexType />
+      </s:element>
+      <s:element name="VerificarDataEntrega">
+        <s:complexType />
+      </s:element>
+      <s:element name="VerificarDataEntregaResponse">
+        <s:complexType />
+      </s:element>
+      <s:element name="AtualizarStatusPedido">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="pedido" type="tns:Pedido" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="Pedido">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="pedidoId" type="s:int" />
+          <s:element minOccurs="1" maxOccurs="1" name="status" type="tns:StatusPedido" />
+          <s:element minOccurs="1" maxOccurs="1" name="data" type="s:dateTime" />
+          <s:element minOccurs="1" maxOccurs="1" name="qtdeTotalVinho" type="s:int" />
+          <s:element minOccurs="1" maxOccurs="1" name="valorTotal" type="s:double" />
+          <s:element minOccurs="0" maxOccurs="1" name="cnpj" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="cpf" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="nomePF" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="cartaoPF" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="enderecoPF" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:simpleType name="StatusPedido">
+        <s:restriction base="s:string">
+          <s:enumeration value="Estoque" />
+          <s:enumeration value="Transito" />
+          <s:enumeration value="Entregue" />
+        </s:restriction>
+      </s:simpleType>
+      <s:element name="AtualizarStatusPedidoResponse">
+        <s:complexType />
+      </s:element>
+    </s:schema>
+  </wsdl:types>
+  <wsdl:message name="ListarEstoqueSoapIn">
+    <wsdl:part name="parameters" element="tns:ListarEstoque" />
+  </wsdl:message>
+  <wsdl:message name="ListarEstoqueSoapOut">
+    <wsdl:part name="parameters" element="tns:ListarEstoqueResponse" />
+  </wsdl:message>
+  <wsdl:message name="VerificarEstoqueSoapIn">
+    <wsdl:part name="parameters" element="tns:VerificarEstoque" />
+  </wsdl:message>
+  <wsdl:message name="VerificarEstoqueSoapOut">
+    <wsdl:part name="parameters" element="tns:VerificarEstoqueResponse" />
+  </wsdl:message>
+  <wsdl:message name="VerificarDemandaSoapIn">
+    <wsdl:part name="parameters" element="tns:VerificarDemanda" />
+  </wsdl:message>
+  <wsdl:message name="VerificarDemandaSoapOut">
+    <wsdl:part name="parameters" element="tns:VerificarDemandaResponse" />
+  </wsdl:message>
+  <wsdl:message name="SolicitarReposicaoSoapIn">
+    <wsdl:part name="parameters" element="tns:SolicitarReposicao" />
+  </wsdl:message>
+  <wsdl:message name="SolicitarReposicaoSoapOut">
+    <wsdl:part name="parameters" element="tns:SolicitarReposicaoResponse" />
+  </wsdl:message>
+  <wsdl:message name="EnviarArquivoXmlSoapIn">
+    <wsdl:part name="parameters" element="tns:EnviarArquivoXml" />
+  </wsdl:message>
+  <wsdl:message name="EnviarArquivoXmlSoapOut">
+    <wsdl:part name="parameters" element="tns:EnviarArquivoXmlResponse" />
+  </wsdl:message>
+  <wsdl:message name="VerificarDataEntregaSoapIn">
+    <wsdl:part name="parameters" element="tns:VerificarDataEntrega" />
+  </wsdl:message>
+  <wsdl:message name="VerificarDataEntregaSoapOut">
+    <wsdl:part name="parameters" element="tns:VerificarDataEntregaResponse" />
+  </wsdl:message>
+  <wsdl:message name="AtualizarStatusPedidoSoapIn">
+    <wsdl:part name="parameters" element="tns:AtualizarStatusPedido" />
+  </wsdl:message>
+  <wsdl:message name="AtualizarStatusPedidoSoapOut">
+    <wsdl:part name="parameters" element="tns:AtualizarStatusPedidoResponse" />
+  </wsdl:message>
+  <wsdl:portType name="EstoqueSoap">
+    <wsdl:operation name="ListarEstoque">
+      <wsdl:input message="tns:ListarEstoqueSoapIn" />
+      <wsdl:output message="tns:ListarEstoqueSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="VerificarEstoque">
+      <wsdl:input message="tns:VerificarEstoqueSoapIn" />
+      <wsdl:output message="tns:VerificarEstoqueSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="VerificarDemanda">
+      <wsdl:input message="tns:VerificarDemandaSoapIn" />
+      <wsdl:output message="tns:VerificarDemandaSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="SolicitarReposicao">
+      <wsdl:input message="tns:SolicitarReposicaoSoapIn" />
+      <wsdl:output message="tns:SolicitarReposicaoSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="EnviarArquivoXml">
+      <wsdl:input message="tns:EnviarArquivoXmlSoapIn" />
+      <wsdl:output message="tns:EnviarArquivoXmlSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="VerificarDataEntrega">
+      <wsdl:input message="tns:VerificarDataEntregaSoapIn" />
+      <wsdl:output message="tns:VerificarDataEntregaSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="AtualizarStatusPedido">
+      <wsdl:input message="tns:AtualizarStatusPedidoSoapIn" />
+      <wsdl:output message="tns:AtualizarStatusPedidoSoapOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="EstoqueSoap" type="tns:EstoqueSoap">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="ListarEstoque">
+      <soap:operation soapAction="http://ipt.br/soa/ListarEstoque" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="VerificarEstoque">
+      <soap:operation soapAction="http://ipt.br/soa/VerificarEstoque" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="VerificarDemanda">
+      <soap:operation soapAction="http://ipt.br/soa/VerificarDemanda" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SolicitarReposicao">
+      <soap:operation soapAction="http://ipt.br/soa/SolicitarReposicao" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="EnviarArquivoXml">
+      <soap:operation soapAction="http://ipt.br/soa/EnviarArquivoXml" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="VerificarDataEntrega">
+      <soap:operation soapAction="http://ipt.br/soa/VerificarDataEntrega" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AtualizarStatusPedido">
+      <soap:operation soapAction="http://ipt.br/soa/AtualizarStatusPedido" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="EstoqueSoap12" type="tns:EstoqueSoap">
+    <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="ListarEstoque">
+      <soap12:operation soapAction="http://ipt.br/soa/ListarEstoque" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="VerificarEstoque">
+      <soap12:operation soapAction="http://ipt.br/soa/VerificarEstoque" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="VerificarDemanda">
+      <soap12:operation soapAction="http://ipt.br/soa/VerificarDemanda" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SolicitarReposicao">
+      <soap12:operation soapAction="http://ipt.br/soa/SolicitarReposicao" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="EnviarArquivoXml">
+      <soap12:operation soapAction="http://ipt.br/soa/EnviarArquivoXml" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="VerificarDataEntrega">
+      <soap12:operation soapAction="http://ipt.br/soa/VerificarDataEntrega" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AtualizarStatusPedido">
+      <soap12:operation soapAction="http://ipt.br/soa/AtualizarStatusPedido" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="Estoque">
+    <wsdl:port name="EstoqueSoap" binding="tns:EstoqueSoap">
+      <soap:address location="http://localhost:1709/Services/Estoque.asmx" />
+    </wsdl:port>
+    <wsdl:port name="EstoqueSoap12" binding="tns:EstoqueSoap12">
+      <soap12:address location="http://localhost:1709/Services/Estoque.asmx" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="http://ipt.br/soa" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" targetNamespace="http://ipt.br/soa" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://ipt.br/soa">
+      <s:element name="VerificarPedidoUsuario">
+        <s:complexType />
+      </s:element>
+      <s:element name="VerificarPedidoUsuarioResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="VerificarPedidoUsuarioResult" type="s:boolean" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ChecarLimitesMinimos">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="quantidade" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="valor" type="s:double" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ChecarLimitesMinimosResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="ChecarLimitesMinimosResult" type="s:boolean" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+    </s:schema>
+  </wsdl:types>
+  <wsdl:message name="VerificarPedidoUsuarioSoapIn">
+    <wsdl:part name="parameters" element="tns:VerificarPedidoUsuario" />
+  </wsdl:message>
+  <wsdl:message name="VerificarPedidoUsuarioSoapOut">
+    <wsdl:part name="parameters" element="tns:VerificarPedidoUsuarioResponse" />
+  </wsdl:message>
+  <wsdl:message name="ChecarLimitesMinimosSoapIn">
+    <wsdl:part name="parameters" element="tns:ChecarLimitesMinimos" />
+  </wsdl:message>
+  <wsdl:message name="ChecarLimitesMinimosSoapOut">
+    <wsdl:part name="parameters" element="tns:ChecarLimitesMinimosResponse" />
+  </wsdl:message>
+  <wsdl:portType name="CompraSoap">
+    <wsdl:operation name="VerificarPedidoUsuario">
+      <wsdl:input message="tns:VerificarPedidoUsuarioSoapIn" />
+      <wsdl:output message="tns:VerificarPedidoUsuarioSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="ChecarLimitesMinimos">
+      <wsdl:input message="tns:ChecarLimitesMinimosSoapIn" />
+      <wsdl:output message="tns:ChecarLimitesMinimosSoapOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="CompraSoap" type="tns:CompraSoap">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="VerificarPedidoUsuario">
+      <soap:operation soapAction="http://ipt.br/soa/VerificarPedidoUsuario" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ChecarLimitesMinimos">
+      <soap:operation soapAction="http://ipt.br/soa/ChecarLimitesMinimos" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="CompraSoap12" type="tns:CompraSoap">
+    <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="VerificarPedidoUsuario">
+      <soap12:operation soapAction="http://ipt.br/soa/VerificarPedidoUsuario" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ChecarLimitesMinimos">
+      <soap12:operation soapAction="http://ipt.br/soa/ChecarLimitesMinimos" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="Compra">
+    <wsdl:port name="CompraSoap" binding="tns:CompraSoap">
+      <soap:address location="http://localhost:1709/Services/Compra.asmx" />
+    </wsdl:port>
+    <wsdl:port name="CompraSoap12" binding="tns:CompraSoap12">
+      <soap12:address location="http://localhost:1709/Services/Compra.asmx" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

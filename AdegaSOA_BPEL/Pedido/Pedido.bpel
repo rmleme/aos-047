@@ -1,0 +1,143 @@
+<!--
+  ///////////////////////////////////////////////////////////////////////////////////////////// 
+  // Oracle JDeveloper BPEL Designer 
+  // 
+  // Created: Mon Sep 27 03:41:48 GMT-03:00 2010
+  // Author:  Rodrigo
+  // Purpose: Synchronous BPEL Process
+  ///////////////////////////////////////////////////////////////////////////////////////////// 
+-->
+<process name="Pedido" targetNamespace="http://xmlns.oracle.com/Pedido" xmlns="http://schemas.xmlsoap.org/ws/2003/03/business-process/" xmlns:xp20="http://www.oracle.com/XSL/Transform/java/oracle.tip.pc.services.functions.Xpath20" xmlns:bpws="http://schemas.xmlsoap.org/ws/2003/03/business-process/" xmlns:ns1="http://ipt.br/soa" xmlns:ldap="http://schemas.oracle.com/xpath/extension/ldap" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:client="http://xmlns.oracle.com/Pedido" xmlns:bpelx="http://schemas.oracle.com/bpel/extension" xmlns:ora="http://schemas.oracle.com/xpath/extension" xmlns:orcl="http://www.oracle.com/XSL/Transform/java/oracle.tip.pc.services.functions.ExtFunc"><!-- ================================================================= --><!-- PARTNERLINKS                                                      --><!-- List of services participating in this BPEL process               --><!-- ================================================================= -->
+  <partnerLinks><!-- 
+    The 'client' role represents the requester of this service. It is 
+    used for callback. The location and correlation information associated
+    with the client role are automatically set using WS-Addressing.
+    -->
+    <partnerLink name="client" partnerLinkType="client:Pedido" myRole="PedidoProvider"/>
+    <partnerLink name="CompraService" partnerRole="CompraSoap_Role" partnerLinkType="ns1:CompraSoap_PL"/>
+    <partnerLink name="CreditoService" partnerRole="CreditoSoap_Role" partnerLinkType="ns1:CreditoSoap_PL"/>
+    <partnerLink name="PedidoService" partnerRole="PedidoSoap_Role" partnerLinkType="ns1:PedidoSoap_PL"/>
+    <partnerLink name="SegurancaService" partnerRole="SegurancaSoap_Role" partnerLinkType="ns1:SegurancaSoap_PL"/>
+  </partnerLinks><!-- ================================================================= --><!-- VARIABLES                                                         --><!-- List of messages and XML documents used within this BPEL process  --><!-- ================================================================= -->
+  <variables><!-- Reference to the message passed as input during initiation -->
+    <variable name="inputVariable" messageType="client:PedidoRequestMessage"/><!--  
+    Reference to the message that will be returned to the requester
+    -->
+    <variable name="outputVariable" messageType="client:PedidoResponseMessage"/>
+    <variable name="GerarOrderInputVariable" messageType="ns1:GerarOrderIdSoapIn"/>
+    <variable name="GerarOrderIDOutputVariable" messageType="ns1:GerarOrderIdSoapOut"/>
+    <variable name="DebitarCartaoInputVariable" messageType="ns1:DebitarCartaoSoapIn"/>
+    <variable name="DebitarCartaoOutputVariable" messageType="ns1:DebitarCartaoSoapOut"/>
+    <variable name="GerarOrderID_GerarOrderId_OutputVariable" messageType="ns1:GerarOrderIdSoapOut"/>
+    <variable name="GerarOrderIDOutputVariable_1" messageType="ns1:GerarOrderIdSoapOut"/>
+    <variable name="GerarOrderIDInputVariable" messageType="ns1:GerarOrderIdSoapIn"/>
+    <variable name="GerarOrderID_PF_InputVariable" messageType="ns1:GerarOrderIdSoapIn"/>
+    <variable name="GerarOrderID_PF_OutputVariable" messageType="ns1:GerarOrderIdSoapOut"/>
+    <variable name="ChecarLimitesMinimosInputVariable" messageType="ns1:ChecarLimitesMinimosSoapIn"/>
+    <variable name="ChecarLimitesMinimosOutputVariable" messageType="ns1:ChecarLimitesMinimosSoapOut"/>
+    <variable name="ChecarLimitesMinimos1InputVariable" messageType="ns1:ChecarLimitesMinimosSoapIn"/>
+    <variable name="ChecarLimitesMinimos1OutputVariable" messageType="ns1:ChecarLimitesMinimosSoapOut"/>
+    <variable name="DebitarCartao1InputVariable" messageType="ns1:DebitarCartaoSoapIn"/>
+    <variable name="DebitarCartao1OutputVariable" messageType="ns1:DebitarCartaoSoapOut"/>
+    <variable name="InvokeGerarOrderId1InputVariable" messageType="ns1:GerarOrderIdSoapIn"/>
+    <variable name="InvokeGerarOrderId1OutputVariable" messageType="ns1:GerarOrderIdSoapOut"/>
+    <variable name="GerarOrderID_PF1InputVariable" messageType="ns1:GerarOrderIdSoapIn"/>
+    <variable name="GerarOrderID_PF1OutputVariable" messageType="ns1:GerarOrderIdSoapOut"/>
+    <variable name="VerificarIdUsuarioInput" messageType="ns1:VerificarIdUsuarioSoapIn"/>
+    <variable name="VerificarIdUsuarioOutput" messageType="ns1:VerificarIdUsuarioSoapOut"/>
+    <variable name="VerificarIdUsuario1Input" messageType="ns1:VerificarIdUsuarioSoapIn"/>
+    <variable name="VerificarIdUsuario1Output" messageType="ns1:VerificarIdUsuarioSoapOut"/>
+  </variables><!-- ================================================================= --><!-- ORCHESTRATION LOGIC                                               --><!-- Set of activities coordinating the flow of messages across the    --><!-- services integrated within this business process                  --><!-- ================================================================= -->
+  <sequence name="main"><!-- Receive input from requestor. 
+    Note: This maps to operation defined in Pedido.wsdl
+    -->
+    <receive name="receiveInput" partnerLink="client" portType="client:Pedido" operation="process" variable="inputVariable" createInstance="yes"/><!-- Generate reply to synchronous request -->
+    <switch name="Switch_3">
+      <case condition="string-length(bpws:getVariableData('inputVariable','payload','/client:PedidoProcessRequest/client:cnpj')) != 0">
+        <sequence name="Sequence_3">
+          <assign name="Assign_5">
+            <copy>
+              <from variable="inputVariable" part="payload" query="/client:PedidoProcessRequest/client:cnpj"/>
+              <to variable="VerificarIdUsuario1Input" part="parameters" query="/ns1:VerificarIdUsuario/ns1:cnpj"/>
+            </copy>
+            <copy>
+              <from variable="inputVariable" part="payload" query="/client:PedidoProcessRequest/client:senha"/>
+              <to variable="VerificarIdUsuario1Input" part="parameters" query="/ns1:VerificarIdUsuario/ns1:senha"/>
+            </copy>
+          </assign>
+          <invoke name="VerificarIdUsuario" partnerLink="SegurancaService" portType="ns1:SegurancaSoap" operation="VerificarIdUsuario" inputVariable="VerificarIdUsuario1Input" outputVariable="VerificarIdUsuario1Output"/>
+          <switch name="Switch_6">
+            <case condition="bpws:getVariableData('VerificarIdUsuario1Output','parameters','/ns1:VerificarIdUsuarioResponse/ns1:VerificarIdUsuarioResult') = 'true'">
+              <sequence name="Sequence_7">
+                <assign name="Assign_1">
+                  <copy>
+                    <from variable="inputVariable" part="payload" query="/client:PedidoProcessRequest/client:qtdeTotalVinho"/>
+                    <to variable="ChecarLimitesMinimos1InputVariable" part="parameters" query="/ns1:ChecarLimitesMinimos/ns1:quantidade"/>
+                  </copy>
+                  <copy>
+                    <from variable="inputVariable" part="payload" query="/client:PedidoProcessRequest/client:valorTotal"/>
+                    <to variable="ChecarLimitesMinimos1InputVariable" part="parameters" query="/ns1:ChecarLimitesMinimos/ns1:valor"/>
+                  </copy>
+                </assign>
+                <invoke name="ChecarLimitesMinimos" partnerLink="CompraService" portType="ns1:CompraSoap" operation="ChecarLimitesMinimos" inputVariable="ChecarLimitesMinimos1InputVariable" outputVariable="ChecarLimitesMinimos1OutputVariable"/>
+                <switch name="Switch_4">
+                  <case condition="bpws:getVariableData('ChecarLimitesMinimos1OutputVariable','parameters','/ns1:ChecarLimitesMinimosResponse/ns1:ChecarLimitesMinimosResult') = 'true'">
+                    <sequence name="Sequence_5">
+                      <assign name="Transform_2">
+                        <copy>
+                          <from expression="ora:processXSLT('Transformation_2.xsl',bpws:getVariableData('inputVariable','payload'))"/>
+                          <to variable="InvokeGerarOrderId1InputVariable" part="parameters"/>
+                        </copy>
+                        <bpelx:annotation>
+                          <bpelx:pattern>transformation
+                          </bpelx:pattern>
+                        </bpelx:annotation>
+                      </assign>
+                      <invoke name="GerarOrderID" partnerLink="PedidoService" portType="ns1:PedidoSoap" operation="GerarOrderId" inputVariable="InvokeGerarOrderId1InputVariable" outputVariable="InvokeGerarOrderId1OutputVariable"/>
+                    </sequence>
+                  </case>
+                  <otherwise/>
+                </switch>
+              </sequence>
+            </case>
+            <otherwise/>
+          </switch>
+        </sequence>
+      </case>
+      <otherwise>
+        <sequence name="Sequence_4">
+          <assign name="Assign_2">
+            <copy>
+              <from variable="inputVariable" part="payload" query="/client:PedidoProcessRequest/client:cartaoPF"/>
+              <to variable="DebitarCartao1InputVariable" part="parameters" query="/ns1:DebitarCartao/ns1:cartaoId"/>
+            </copy>
+            <copy>
+              <from variable="inputVariable" part="payload" query="/client:PedidoProcessRequest/client:valorTotal"/>
+              <to variable="DebitarCartao1InputVariable" part="parameters" query="/ns1:DebitarCartao/ns1:valor"/>
+            </copy>
+          </assign>
+          <invoke name="DebitarCartao" partnerLink="CreditoService" portType="ns1:CreditoSoap" operation="DebitarCartao" inputVariable="DebitarCartao1InputVariable" outputVariable="DebitarCartao1OutputVariable"/>
+          <switch name="Switch_5">
+            <case condition="bpws:getVariableData('DebitarCartao1OutputVariable','parameters','/ns1:DebitarCartaoResponse/ns1:DebitarCartaoResult') = 'true'">
+              <sequence name="Sequence_6">
+                <assign name="Transform_1">
+                  <copy>
+                    <from expression="ora:processXSLT('Transformation_1.xsl',bpws:getVariableData('inputVariable','payload'))"/>
+                    <to variable="GerarOrderID_PF1InputVariable" part="parameters"/>
+                  </copy>
+                  <bpelx:annotation>
+                    <bpelx:pattern>transformation
+                    </bpelx:pattern>
+                  </bpelx:annotation>
+                </assign>
+                <invoke name="GerarOrderID_PF" partnerLink="PedidoService" portType="ns1:PedidoSoap" operation="GerarOrderId" inputVariable="GerarOrderID_PF1InputVariable" outputVariable="GerarOrderID_PF1OutputVariable"/>
+              </sequence>
+            </case>
+            <otherwise/>
+          </switch>
+        </sequence>
+      </otherwise>
+    </switch>
+    <reply name="replyOutput" partnerLink="client" portType="client:Pedido" operation="process" variable="outputVariable"/>
+  </sequence>
+</process>

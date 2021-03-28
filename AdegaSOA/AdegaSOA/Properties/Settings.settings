@@ -1,0 +1,48 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="AdegaSOA.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="AdegaSOA_localhost_Estoque" Type="(Web Service URL)" Scope="Application">
+      <Value Profile="(Default)">http://localhost:2600/Services/Estoque.asmx</Value>
+    </Setting>
+    <Setting Name="AdegaSOA_localhost1_Estoque" Type="(Web Service URL)" Scope="Application">
+      <Value Profile="(Default)">http://localhost:1709/Services/Estoque.asmx</Value>
+    </Setting>
+    <Setting Name="AdegaSOA_localhost2_Seguranca" Type="(Web Service URL)" Scope="Application">
+      <Value Profile="(Default)">http://localhost:1709/Services/Seguranca.asmx</Value>
+    </Setting>
+    <Setting Name="AdegaSOA_localhost3_Credito" Type="(Web Service URL)" Scope="Application">
+      <Value Profile="(Default)">http://localhost:1709/Services/Credito.asmx</Value>
+    </Setting>
+    <Setting Name="AdegaSOA_localhost4_Usuario" Type="(Web Service URL)" Scope="Application">
+      <Value Profile="(Default)">http://localhost:1709/Services/Usuario.asmx</Value>
+    </Setting>
+    <Setting Name="AdegaSOA_localhost5_Pedido" Type="(Web Service URL)" Scope="Application">
+      <Value Profile="(Default)">http://localhost:1709/Services/Pedido.asmx</Value>
+    </Setting>
+    <Setting Name="AdegaSOA_localhost6_Compra" Type="(Web Service URL)" Scope="Application">
+      <Value Profile="(Default)">http://localhost:1709/Services/Compra.asmx</Value>
+    </Setting>
+    <Setting Name="AdegaSOA_external1_Serasa" Type="(Web Service URL)" Scope="Application">
+      <Value Profile="(Default)">http://localhost:1709/ExternalServices/Serasa.asmx</Value>
+    </Setting>
+    <Setting Name="AdegaSOA_external2_Visa" Type="(Web Service URL)" Scope="Application">
+      <Value Profile="(Default)">http://localhost:1709/ExternalServices/Visa.asmx</Value>
+    </Setting>
+    <Setting Name="AdegaSOA_external3_Distribuidora" Type="(Web Service URL)" Scope="Application">
+      <Value Profile="(Default)">http://localhost:1709/ExternalServices/Distribuidora.asmx</Value>
+    </Setting>
+    <Setting Name="AdegaSOA_bpel1_Cancelamento" Type="(Web Service URL)" Scope="Application">
+      <Value Profile="(Default)">http://rodrigo-pc:9700/orabpel/default/Cancelamento/1.0</Value>
+    </Setting>
+    <Setting Name="AdegaSOA_bpel2_Reposicao" Type="(Web Service URL)" Scope="Application">
+      <Value Profile="(Default)">http://rodrigo-pc:9700/orabpel/default/Reposicao/1.0</Value>
+    </Setting>
+    <Setting Name="AdegaSOA_bpel3_Cadastramento" Type="(Web Service URL)" Scope="Application">
+      <Value Profile="(Default)">http://rodrigo-pc:9700/orabpel/default/Cadastramento/1.0</Value>
+    </Setting>
+    <Setting Name="AdegaSOA_bpel4_Pedido" Type="(Web Service URL)" Scope="Application">
+      <Value Profile="(Default)">http://rodrigo-pc:9700/orabpel/default/Pedido/1.0</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>

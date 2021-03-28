@@ -1,0 +1,66 @@
+<!--
+  ///////////////////////////////////////////////////////////////////////////////////////////// 
+  // Oracle JDeveloper BPEL Designer 
+  // 
+  // Created: Sat Sep 25 16:51:21 GMT-03:00 2010
+  // Author:  Andre
+  // Purpose: Synchronous BPEL Process
+  ///////////////////////////////////////////////////////////////////////////////////////////// 
+-->
+<process name="Reposicao" targetNamespace="http://xmlns.oracle.com/Reposicao" xmlns="http://schemas.xmlsoap.org/ws/2003/03/business-process/" xmlns:xp20="http://www.oracle.com/XSL/Transform/java/oracle.tip.pc.services.functions.Xpath20" xmlns:bpws="http://schemas.xmlsoap.org/ws/2003/03/business-process/" xmlns:ns1="http://ipt.br/soa" xmlns:ldap="http://schemas.oracle.com/xpath/extension/ldap" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:client="http://xmlns.oracle.com/Reposicao" xmlns:bpelx="http://schemas.oracle.com/bpel/extension" xmlns:ora="http://schemas.oracle.com/xpath/extension" xmlns:orcl="http://www.oracle.com/XSL/Transform/java/oracle.tip.pc.services.functions.ExtFunc"><!-- ================================================================= --><!-- PARTNERLINKS                                                      --><!-- List of services participating in this BPEL process               --><!-- ================================================================= -->
+  <partnerLinks><!-- 
+    The 'client' role represents the requester of this service. It is 
+    used for callback. The location and correlation information associated
+    with the client role are automatically set using WS-Addressing.
+    -->
+    <partnerLink name="client" partnerLinkType="client:Reposicao" myRole="ReposicaoProvider"/>
+    <partnerLink name="EstoqueService" partnerRole="EstoqueSoap_Role" partnerLinkType="ns1:EstoqueSoap_PL"/>
+  </partnerLinks><!-- ================================================================= --><!-- VARIABLES                                                         --><!-- List of messages and XML documents used within this BPEL process  --><!-- ================================================================= -->
+  <variables><!-- Reference to the message passed as input during initiation -->
+    <variable name="inputVariable" messageType="client:ReposicaoRequestMessage"/><!--  
+    Reference to the message that will be returned to the requester
+    -->
+    <variable name="outputVariable" messageType="client:ReposicaoResponseMessage"/>
+    <variable name="VerificarReposicaoInput" messageType="ns1:VerificarReposicaoSoapIn"/>
+    <variable name="SolicitarReposicaoInput" messageType="ns1:SolicitarReposicaoSoapIn"/>
+    <variable name="VerificarReposicaoOutput" messageType="ns1:VerificarReposicaoSoapOut"/>
+    <variable name="EnviarArquivoXmlInput" messageType="ns1:EnviarArquivoXmlSoapIn"/>
+    <variable name="EnviarArquivoXmlOutput" messageType="ns1:EnviarArquivoXmlSoapOut"/>
+    <variable name="SolicitarReposicaoOutput" messageType="ns1:SolicitarReposicaoSoapOut"/>
+  </variables><!-- ================================================================= --><!-- ORCHESTRATION LOGIC                                               --><!-- Set of activities coordinating the flow of messages across the    --><!-- services integrated within this business process                  --><!-- ================================================================= -->
+  <sequence name="main"><!-- Receive input from requestor. 
+    Note: This maps to operation defined in Reposicao.wsdl
+    -->
+    <receive name="receiveInput" partnerLink="client" portType="client:Reposicao" operation="process" variable="inputVariable" createInstance="yes"/><!-- Generate reply to synchronous request -->
+    <invoke name="VerificarReposicao" partnerLink="EstoqueService" portType="ns1:EstoqueSoap" operation="VerificarReposicao" inputVariable="VerificarReposicaoInput" outputVariable="VerificarReposicaoOutput"/>
+    <switch name="Switch_1">
+      <case condition="bpws:getVariableData('VerificarReposicaoOutput','parameters','/ns1:VerificarReposicaoResponse/ns1:VerificarReposicaoResult') != 0">
+        <sequence name="Sequence_1">
+          <assign name="Assign_1">
+            <copy>
+              <from variable="VerificarReposicaoOutput" part="parameters" query="/ns1:VerificarReposicaoResponse/ns1:VerificarReposicaoResult"/>
+              <to variable="SolicitarReposicaoInput" part="parameters" query="/ns1:SolicitarReposicao/ns1:listaReposicao"/>
+            </copy>
+          </assign>
+          <invoke name="SolicitarReposicao" partnerLink="EstoqueService" portType="ns1:EstoqueSoap" operation="SolicitarReposicao" inputVariable="SolicitarReposicaoInput" outputVariable="SolicitarReposicaoOutput"/>
+          <switch name="Switch_2">
+            <case condition="bpws:getVariableData('SolicitarReposicaoOutput','parameters','/ns1:SolicitarReposicaoResponse/ns1:SolicitarReposicaoResult') != 0">
+              <sequence name="Sequence_2">
+                <assign name="Assign_2">
+                  <copy>
+                    <from variable="SolicitarReposicaoOutput" part="parameters" query="/ns1:SolicitarReposicaoResponse/ns1:SolicitarReposicaoResult"/>
+                    <to variable="EnviarArquivoXmlInput" part="parameters" query="/ns1:EnviarArquivoXml/ns1:listaReposicao"/>
+                  </copy>
+                </assign>
+                <invoke name="EnviarArquivoXml" partnerLink="EstoqueService" portType="ns1:EstoqueSoap" operation="EnviarArquivoXml" inputVariable="EnviarArquivoXmlInput" outputVariable="EnviarArquivoXmlOutput"/>
+              </sequence>
+            </case>
+            <otherwise/>
+          </switch>
+        </sequence>
+      </case>
+      <otherwise/>
+    </switch>
+    <reply name="replyOutput" partnerLink="client" portType="client:Reposicao" operation="process" variable="outputVariable"/>
+  </sequence>
+</process>

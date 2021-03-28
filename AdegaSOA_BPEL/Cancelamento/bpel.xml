@@ -1,0 +1,16 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<BPELSuitcase>
+   <BPELProcess id="Cancelamento" src="Cancelamento.bpel">
+      <partnerLinkBindings>
+         <partnerLinkBinding name="client">
+            <property name="wsdlLocation">Cancelamento.wsdl</property>
+         </partnerLinkBinding>
+         <partnerLinkBinding name="PedidoService">
+            <property name="wsdlLocation">PedidoService.wsdl</property>
+         </partnerLinkBinding>
+         <partnerLinkBinding name="CreditoService">
+            <property name="wsdlLocation">CreditoService.wsdl</property>
+         </partnerLinkBinding>
+      </partnerLinkBindings>
+   </BPELProcess>
+</BPELSuitcase>

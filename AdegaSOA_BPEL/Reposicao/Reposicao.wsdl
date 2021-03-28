@@ -1,0 +1,40 @@
+<definitions name="Reposicao" targetNamespace="http://xmlns.oracle.com/Reposicao"
+	xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:plnk="http://schemas.xmlsoap.org/ws/2003/05/partner-link/"
+	xmlns:client="http://xmlns.oracle.com/Reposicao">
+    <types>
+        <schema attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://xmlns.oracle.com/Reposicao"
+             xmlns="http://www.w3.org/2001/XMLSchema">
+            <element name="ReposicaoProcessRequest">
+                <complexType>
+                    <sequence>
+                        <element name="input" type="string"/>
+                    </sequence>
+                </complexType>
+            </element>
+            <element name="ReposicaoProcessResponse">
+                <complexType>
+                    <sequence>
+                        <element name="result" type="string"/>
+                    </sequence>
+                </complexType>
+            </element>
+        </schema>
+    </types>
+    <message name="ReposicaoRequestMessage">
+        <part name="payload" element="client:ReposicaoProcessRequest"/>
+    </message>
+    <message name="ReposicaoResponseMessage">
+        <part name="payload" element="client:ReposicaoProcessResponse"/>
+    </message>
+    <portType name="Reposicao">
+        <operation name="process">
+            <input message="client:ReposicaoRequestMessage"/>
+            <output message="client:ReposicaoResponseMessage"/>
+        </operation>
+    </portType>
+    <plnk:partnerLinkType name="Reposicao">
+        <plnk:role name="ReposicaoProvider">
+            <plnk:portType name="client:Reposicao"/>
+        </plnk:role>
+    </plnk:partnerLinkType>
+</definitions>

@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<definitions xmlns:tns="http://xmlns.oracle.com/Cadastramento" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:plnk="http://schemas.xmlsoap.org/ws/2003/05/partner-link/" xmlns:client="http://xmlns.oracle.com/Cadastramento" name="Cadastramento" targetNamespace="http://xmlns.oracle.com/Cadastramento" xmlns="http://schemas.xmlsoap.org/wsdl/">
+  <plnk:partnerLinkType name="Cadastramento">
+    <plnk:role name="CadastramentoProvider">
+      <plnk:portType name="tns:Cadastramento" />
+    </plnk:role>
+  </plnk:partnerLinkType>
+  <types>
+    <schema attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://xmlns.oracle.com/Cadastramento" xmlns="http://www.w3.org/2001/XMLSchema">
+      <element name="CadastramentoProcessRequest">
+        <complexType>
+          <sequence>
+            <element name="cnpj" type="string" />
+            <element name="senha" type="string" />
+          </sequence>
+        </complexType>
+      </element>
+      <element name="CadastramentoProcessResponse">
+        <complexType>
+          <sequence>
+            <element name="result" type="string" />
+          </sequence>
+        </complexType>
+      </element>
+    </schema>
+  </types>
+  <message name="CadastramentoRequestMessage">
+    <part name="payload" element="client:CadastramentoProcessRequest" />
+  </message>
+  <message name="CadastramentoResponseMessage">
+    <part name="payload" element="client:CadastramentoProcessResponse" />
+  </message>
+  <portType name="Cadastramento">
+    <operation name="process">
+      <input message="client:CadastramentoRequestMessage" />
+      <output message="client:CadastramentoResponseMessage" />
+    </operation>
+  </portType>
+  <binding name="CadastramentoBinding" type="client:Cadastramento">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <operation name="process">
+      <soap:operation soapAction="process" style="document" />
+      <input>
+        <soap:body use="literal" />
+      </input>
+      <output>
+        <soap:body use="literal" />
+      </output>
+    </operation>
+  </binding>
+  <service name="Cadastramento">
+    <port name="CadastramentoPort" binding="client:CadastramentoBinding">
+      <soap:address location="http://rodrigo-pc:9700/orabpel/default/Cadastramento/1.0" />
+    </port>
+  </service>
+</definitions>

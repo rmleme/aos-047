@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="http://ipt.br/soa" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" targetNamespace="http://ipt.br/soa" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://ipt.br/soa">
+      <s:element name="DebitarCartao">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="cartaoId" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="valor" type="s:double" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="DebitarCartaoResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="DebitarCartaoResult" type="s:boolean" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="CreditarCartao">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="cartaoId" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="valor" type="s:double" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="CreditarCartaoResponse">
+        <s:complexType />
+      </s:element>
+      <s:element name="ConsultarSerasaSpc">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="cartaoId" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ConsultarSerasaSpcResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="ConsultarSerasaSpcResult" type="s:boolean" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ConsultarSerasaSpcPJ">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="cnpj" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ConsultarSerasaSpcPJResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="ConsultarSerasaSpcPJResult" type="s:boolean" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+    </s:schema>
+  </wsdl:types>
+  <wsdl:message name="DebitarCartaoSoapIn">
+    <wsdl:part name="parameters" element="tns:DebitarCartao" />
+  </wsdl:message>
+  <wsdl:message name="DebitarCartaoSoapOut">
+    <wsdl:part name="parameters" element="tns:DebitarCartaoResponse" />
+  </wsdl:message>
+  <wsdl:message name="CreditarCartaoSoapIn">
+    <wsdl:part name="parameters" element="tns:CreditarCartao" />
+  </wsdl:message>
+  <wsdl:message name="CreditarCartaoSoapOut">
+    <wsdl:part name="parameters" element="tns:CreditarCartaoResponse" />
+  </wsdl:message>
+  <wsdl:message name="ConsultarSerasaSpcSoapIn">
+    <wsdl:part name="parameters" element="tns:ConsultarSerasaSpc" />
+  </wsdl:message>
+  <wsdl:message name="ConsultarSerasaSpcSoapOut">
+    <wsdl:part name="parameters" element="tns:ConsultarSerasaSpcResponse" />
+  </wsdl:message>
+  <wsdl:message name="ConsultarSerasaSpcPJSoapIn">
+    <wsdl:part name="parameters" element="tns:ConsultarSerasaSpcPJ" />
+  </wsdl:message>
+  <wsdl:message name="ConsultarSerasaSpcPJSoapOut">
+    <wsdl:part name="parameters" element="tns:ConsultarSerasaSpcPJResponse" />
+  </wsdl:message>
+  <wsdl:portType name="CreditoSoap">
+    <wsdl:operation name="DebitarCartao">
+      <wsdl:input message="tns:DebitarCartaoSoapIn" />
+      <wsdl:output message="tns:DebitarCartaoSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="CreditarCartao">
+      <wsdl:input message="tns:CreditarCartaoSoapIn" />
+      <wsdl:output message="tns:CreditarCartaoSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="ConsultarSerasaSpc">
+      <wsdl:input message="tns:ConsultarSerasaSpcSoapIn" />
+      <wsdl:output message="tns:ConsultarSerasaSpcSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="ConsultarSerasaSpcPJ">
+      <wsdl:input message="tns:ConsultarSerasaSpcPJSoapIn" />
+      <wsdl:output message="tns:ConsultarSerasaSpcPJSoapOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="CreditoSoap" type="tns:CreditoSoap">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="DebitarCartao">
+      <soap:operation soapAction="http://ipt.br/soa/DebitarCartao" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CreditarCartao">
+      <soap:operation soapAction="http://ipt.br/soa/CreditarCartao" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ConsultarSerasaSpc">
+      <soap:operation soapAction="http://ipt.br/soa/ConsultarSerasaSpc" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ConsultarSerasaSpcPJ">
+      <soap:operation soapAction="http://ipt.br/soa/ConsultarSerasaSpcPJ" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="CreditoSoap12" type="tns:CreditoSoap">
+    <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="DebitarCartao">
+      <soap12:operation soapAction="http://ipt.br/soa/DebitarCartao" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CreditarCartao">
+      <soap12:operation soapAction="http://ipt.br/soa/CreditarCartao" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ConsultarSerasaSpc">
+      <soap12:operation soapAction="http://ipt.br/soa/ConsultarSerasaSpc" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ConsultarSerasaSpcPJ">
+      <soap12:operation soapAction="http://ipt.br/soa/ConsultarSerasaSpcPJ" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="Credito">
+    <wsdl:port name="CreditoSoap" binding="tns:CreditoSoap">
+      <soap:address location="http://localhost:1709/Services/Credito.asmx" />
+    </wsdl:port>
+    <wsdl:port name="CreditoSoap12" binding="tns:CreditoSoap12">
+      <soap12:address location="http://localhost:1709/Services/Credito.asmx" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

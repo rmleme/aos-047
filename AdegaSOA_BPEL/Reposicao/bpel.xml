@@ -1,0 +1,13 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<BPELSuitcase>
+   <BPELProcess id="Reposicao" src="Reposicao.bpel">
+      <partnerLinkBindings>
+         <partnerLinkBinding name="client">
+            <property name="wsdlLocation">Reposicao.wsdl</property>
+         </partnerLinkBinding>
+         <partnerLinkBinding name="EstoqueService">
+            <property name="wsdlLocation">EstoqueService.wsdl</property>
+         </partnerLinkBinding>
+      </partnerLinkBindings>
+   </BPELProcess>
+</BPELSuitcase>

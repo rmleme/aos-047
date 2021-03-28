@@ -1,0 +1,77 @@
+<!--
+  ///////////////////////////////////////////////////////////////////////////////////////////// 
+  // Oracle JDeveloper BPEL Designer 
+  // 
+  // Created: Tue Sep 21 20:14:54 BRT 2010
+  // Author:  Aluno
+  // Purpose: Synchronous BPEL Process
+  ///////////////////////////////////////////////////////////////////////////////////////////// 
+-->
+<process name="Cancelamento" targetNamespace="http://xmlns.oracle.com/Cancelamento" xmlns="http://schemas.xmlsoap.org/ws/2003/03/business-process/" xmlns:xp20="http://www.oracle.com/XSL/Transform/java/oracle.tip.pc.services.functions.Xpath20" xmlns:bpws="http://schemas.xmlsoap.org/ws/2003/03/business-process/" xmlns:ns1="http://ipt.br/soa" xmlns:ldap="http://schemas.oracle.com/xpath/extension/ldap" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:client="http://xmlns.oracle.com/Cancelamento" xmlns:bpelx="http://schemas.oracle.com/bpel/extension" xmlns:ora="http://schemas.oracle.com/xpath/extension" xmlns:orcl="http://www.oracle.com/XSL/Transform/java/oracle.tip.pc.services.functions.ExtFunc"><!-- ================================================================= --><!-- PARTNERLINKS                                                      --><!-- List of services participating in this BPEL process               --><!-- ================================================================= -->
+  <partnerLinks><!-- 
+    The 'client' role represents the requester of this service. It is 
+    used for callback. The location and correlation information associated
+    with the client role are automatically set using WS-Addressing.
+    -->
+    <partnerLink name="client" partnerLinkType="client:Cancelamento" myRole="CancelamentoProvider"/>
+    <partnerLink name="PedidoService" partnerRole="PedidoSoap_Role" partnerLinkType="ns1:PedidoSoap_PL"/>
+    <partnerLink name="CreditoService" partnerRole="CreditoSoap_Role" partnerLinkType="ns1:CreditoSoap_PL"/>
+  </partnerLinks><!-- ================================================================= --><!-- VARIABLES                                                         --><!-- List of messages and XML documents used within this BPEL process  --><!-- ================================================================= -->
+  <variables><!-- Reference to the message passed as input during initiation -->
+    <variable name="inputVariable" messageType="client:CancelamentoRequestMessage"/><!--  
+    Reference to the message that will be returned to the requester
+    -->
+    <variable name="outputVariable" messageType="client:CancelamentoResponseMessage"/>
+    <variable name="ConsultarPedidoOutput" messageType="ns1:ConsultarPedidoSoapOut"/>
+    <variable name="ConsultarPedidoInput" messageType="ns1:ConsultarPedidoSoapIn"/>
+    <variable name="CancelarPedidoOutput" messageType="ns1:CancelarPedidoSoapOut"/>
+    <variable name="CancelarPedidoInput" messageType="ns1:CancelarPedidoSoapIn"/>
+    <variable name="CreditarCartaoInput" messageType="ns1:CreditarCartaoSoapIn"/>
+    <variable name="CreditarCartaoOutput" messageType="ns1:CreditarCartaoSoapOut"/>
+  </variables><!-- ================================================================= --><!-- ORCHESTRATION LOGIC                                               --><!-- Set of activities coordinating the flow of messages across the    --><!-- services integrated within this business process                  --><!-- ================================================================= -->
+  <sequence name="main"><!-- Receive input from requestor. 
+    Note: This maps to operation defined in Cancelamento.wsdl
+    -->
+    <receive name="receiveInput" partnerLink="client" portType="client:Cancelamento" operation="process" variable="inputVariable" createInstance="yes"/><!-- Generate reply to synchronous request -->
+    <assign name="Assign_1">
+      <copy>
+        <from expression="number(bpws:getVariableData('inputVariable','payload','/client:CancelamentoProcessRequest/client:input'))"/>
+        <to variable="ConsultarPedidoInput" part="parameters" query="/ns1:ConsultarPedido/ns1:pedidoId"/>
+      </copy>
+    </assign>
+    <invoke name="ConsultarPedido" partnerLink="PedidoService" portType="ns1:PedidoSoap" operation="ConsultarPedido" inputVariable="ConsultarPedidoInput" outputVariable="ConsultarPedidoOutput"/>
+    <switch name="Switch_1">
+      <case condition="xp20:compare(string(bpws:getVariableData('ConsultarPedidoOutput','parameters','/ns1:ConsultarPedidoResponse/ns1:ConsultarPedidoResult/ns1:status')), 'Estoque') = 0">
+        <sequence name="Sequence_1">
+          <assign name="Assign_2">
+            <copy>
+              <from variable="ConsultarPedidoOutput" part="parameters" query="/ns1:ConsultarPedidoResponse/ns1:ConsultarPedidoResult"/>
+              <to variable="CancelarPedidoInput" part="parameters" query="/ns1:CancelarPedido/ns1:pedido"/>
+            </copy>
+          </assign>
+          <invoke name="CancelarPedido" partnerLink="PedidoService" portType="ns1:PedidoSoap" operation="CancelarPedido" inputVariable="CancelarPedidoInput" outputVariable="CancelarPedidoOutput"/>
+          <switch name="Switch_2">
+            <case condition="string-length(bpws:getVariableData('ConsultarPedidoOutput','parameters','/ns1:ConsultarPedidoResponse/ns1:ConsultarPedidoResult/ns1:cnpj')) = 0">
+              <sequence name="Sequence_2">
+                <assign name="Assign_3">
+                  <copy>
+                    <from variable="CancelarPedidoOutput" part="parameters" query="/ns1:CancelarPedidoResponse/ns1:CancelarPedidoResult/ns1:cartaoPF"/>
+                    <to variable="CreditarCartaoInput" part="parameters" query="/ns1:CreditarCartao/ns1:cartaoId"/>
+                  </copy>
+                  <copy>
+                    <from variable="CancelarPedidoOutput" part="parameters" query="/ns1:CancelarPedidoResponse/ns1:CancelarPedidoResult/ns1:valorTotal"/>
+                    <to variable="CreditarCartaoInput" part="parameters" query="/ns1:CreditarCartao/ns1:valor"/>
+                  </copy>
+                </assign>
+                <invoke name="CreditarCartao" partnerLink="CreditoService" portType="ns1:CreditoSoap" operation="CreditarCartao" inputVariable="CreditarCartaoInput" outputVariable="CreditarCartaoOutput"/>
+              </sequence>
+            </case>
+            <otherwise/>
+          </switch>
+        </sequence>
+      </case>
+      <otherwise/>
+    </switch>
+    <reply name="replyOutput" partnerLink="client" portType="client:Cancelamento" operation="process" variable="outputVariable"/>
+  </sequence>
+</process>

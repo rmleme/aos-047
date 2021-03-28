@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions name="Cadastramento"
+             targetNamespace="http://xmlns.oracle.com/Cadastramento"
+             xmlns="http://schemas.xmlsoap.org/wsdl/"
+             xmlns:client="http://xmlns.oracle.com/Cadastramento"
+             xmlns:plnk="http://schemas.xmlsoap.org/ws/2003/05/partner-link/">
+	<types>
+		<schema attributeFormDefault="qualified"
+			elementFormDefault="qualified"
+			targetNamespace="http://xmlns.oracle.com/Cadastramento"
+			xmlns="http://www.w3.org/2001/XMLSchema">
+			<element name="CadastramentoProcessRequest">
+				<complexType>
+					<sequence>
+						<element name="cnpj" type="string"/>
+            <element name="senha" type="string"/>
+					</sequence>
+				</complexType>
+			</element>
+			<element name="CadastramentoProcessResponse">
+				<complexType>
+					<sequence>
+						<element name="result" type="string"/>
+					</sequence>
+				</complexType>
+			</element>
+		</schema>
+	</types>
+	<message name="CadastramentoRequestMessage">
+		<part name="payload" element="client:CadastramentoProcessRequest"/>
+	</message>
+	<message name="CadastramentoResponseMessage">
+		<part name="payload" element="client:CadastramentoProcessResponse"/>
+	</message>
+	<portType name="Cadastramento">
+		<operation name="process">
+			<input  message="client:CadastramentoRequestMessage" />
+			<output message="client:CadastramentoResponseMessage"/>
+		</operation>
+	</portType>
+	<plnk:partnerLinkType name="Cadastramento">
+		<plnk:role name="CadastramentoProvider">
+			<plnk:portType name="client:Cadastramento"/>
+		</plnk:role>
+	</plnk:partnerLinkType>
+</definitions>

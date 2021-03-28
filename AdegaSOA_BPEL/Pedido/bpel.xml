@@ -1,0 +1,22 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<BPELSuitcase>
+   <BPELProcess id="Pedido" src="Pedido.bpel">
+      <partnerLinkBindings>
+         <partnerLinkBinding name="client">
+            <property name="wsdlLocation">Pedido.wsdl</property>
+         </partnerLinkBinding>
+         <partnerLinkBinding name="CompraService">
+            <property name="wsdlLocation">CompraService.wsdl</property>
+         </partnerLinkBinding>
+         <partnerLinkBinding name="CreditoService">
+            <property name="wsdlLocation">CreditoService.wsdl</property>
+         </partnerLinkBinding>
+         <partnerLinkBinding name="PedidoService">
+            <property name="wsdlLocation">PedidoService.wsdl</property>
+         </partnerLinkBinding>
+         <partnerLinkBinding name="SegurancaService">
+            <property name="wsdlLocation">SegurancaService.wsdl</property>
+         </partnerLinkBinding>
+      </partnerLinkBindings>
+   </BPELProcess>
+</BPELSuitcase>

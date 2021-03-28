@@ -1,0 +1,61 @@
+<!--
+  ///////////////////////////////////////////////////////////////////////////////////////////// 
+  // Oracle JDeveloper BPEL Designer 
+  // 
+  // Created: Mon Sep 27 00:30:45 GMT-03:00 2010
+  // Author:  Rodrigo
+  // Purpose: Synchronous BPEL Process
+  ///////////////////////////////////////////////////////////////////////////////////////////// 
+-->
+<process name="Cadastramento" targetNamespace="http://xmlns.oracle.com/Cadastramento" xmlns="http://schemas.xmlsoap.org/ws/2003/03/business-process/" xmlns:xp20="http://www.oracle.com/XSL/Transform/java/oracle.tip.pc.services.functions.Xpath20" xmlns:bpws="http://schemas.xmlsoap.org/ws/2003/03/business-process/" xmlns:ns1="http://ipt.br/soa" xmlns:ldap="http://schemas.oracle.com/xpath/extension/ldap" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:client="http://xmlns.oracle.com/Cadastramento" xmlns:bpelx="http://schemas.oracle.com/bpel/extension" xmlns:ora="http://schemas.oracle.com/xpath/extension" xmlns:orcl="http://www.oracle.com/XSL/Transform/java/oracle.tip.pc.services.functions.ExtFunc"><!-- ================================================================= --><!-- PARTNERLINKS                                                      --><!-- List of services participating in this BPEL process               --><!-- ================================================================= -->
+  <partnerLinks><!-- 
+    The 'client' role represents the requester of this service. It is 
+    used for callback. The location and correlation information associated
+    with the client role are automatically set using WS-Addressing.
+    -->
+    <partnerLink name="client" partnerLinkType="client:Cadastramento" myRole="CadastramentoProvider"/>
+    <partnerLink name="CreditoService" partnerRole="CreditoSoap_Role" partnerLinkType="ns1:CreditoSoap_PL"/>
+    <partnerLink name="UsuarioService" partnerRole="UsuarioSoap_Role" partnerLinkType="ns1:UsuarioSoap_PL"/>
+  </partnerLinks><!-- ================================================================= --><!-- VARIABLES                                                         --><!-- List of messages and XML documents used within this BPEL process  --><!-- ================================================================= -->
+  <variables><!-- Reference to the message passed as input during initiation -->
+    <variable name="inputVariable" messageType="client:CadastramentoRequestMessage"/><!--  
+    Reference to the message that will be returned to the requester
+    -->
+    <variable name="outputVariable" messageType="client:CadastramentoResponseMessage"/>
+    <variable name="ConsultarSerasaSpcPJInput" messageType="ns1:ConsultarSerasaSpcPJSoapIn"/>
+    <variable name="ConsultarSerasaSpcPJOutput" messageType="ns1:ConsultarSerasaSpcPJSoapOut"/>
+    <variable name="CadastrarClienteInput" messageType="ns1:CadastrarClienteSoapIn"/>
+    <variable name="CadastrarClienteOutput" messageType="ns1:CadastrarClienteSoapOut"/>
+  </variables><!-- ================================================================= --><!-- ORCHESTRATION LOGIC                                               --><!-- Set of activities coordinating the flow of messages across the    --><!-- services integrated within this business process                  --><!-- ================================================================= -->
+  <sequence name="main"><!-- Receive input from requestor. 
+    Note: This maps to operation defined in Cadastramento.wsdl
+    -->
+    <receive name="receiveInput" partnerLink="client" portType="client:Cadastramento" operation="process" variable="inputVariable" createInstance="yes"/><!-- Generate reply to synchronous request -->
+    <assign name="Assign_1">
+      <copy>
+        <from variable="inputVariable" part="payload" query="/client:CadastramentoProcessRequest/client:cnpj"/>
+        <to variable="ConsultarSerasaSpcPJInput" part="parameters" query="/ns1:ConsultarSerasaSpcPJ/ns1:cnpj"/>
+      </copy>
+    </assign>
+    <invoke name="ConsultarSerasaSpcPJ" partnerLink="CreditoService" portType="ns1:CreditoSoap" operation="ConsultarSerasaSpcPJ" inputVariable="ConsultarSerasaSpcPJInput" outputVariable="ConsultarSerasaSpcPJOutput"/>
+    <switch name="Switch_1">
+      <case condition="bpws:getVariableData('ConsultarSerasaSpcPJOutput','parameters','/ns1:ConsultarSerasaSpcPJResponse/ns1:ConsultarSerasaSpcPJResult') = 'true'">
+        <sequence name="Sequence_1">
+          <assign name="Assign_2">
+            <copy>
+              <from variable="inputVariable" part="payload" query="/client:CadastramentoProcessRequest/client:cnpj"/>
+              <to variable="CadastrarClienteInput" part="parameters" query="/ns1:CadastrarCliente/ns1:cnpj"/>
+            </copy>
+            <copy>
+              <from variable="inputVariable" part="payload" query="/client:CadastramentoProcessRequest/client:senha"/>
+              <to variable="CadastrarClienteInput" part="parameters" query="/ns1:CadastrarCliente/ns1:senha"/>
+            </copy>
+          </assign>
+          <invoke name="CadastrarCliente" partnerLink="UsuarioService" portType="ns1:UsuarioSoap" operation="CadastrarCliente" inputVariable="CadastrarClienteInput" outputVariable="CadastrarClienteOutput"/>
+        </sequence>
+      </case>
+      <otherwise/>
+    </switch>
+    <reply name="replyOutput" partnerLink="client" portType="client:Cadastramento" operation="process" variable="outputVariable"/>
+  </sequence>
+</process>

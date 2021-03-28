@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions name="Pedido"
+             targetNamespace="http://xmlns.oracle.com/Pedido"
+             xmlns="http://schemas.xmlsoap.org/wsdl/"
+             xmlns:client="http://xmlns.oracle.com/Pedido"
+             xmlns:plnk="http://schemas.xmlsoap.org/ws/2003/05/partner-link/">
+	<types>
+		<schema attributeFormDefault="qualified"
+			elementFormDefault="qualified"
+			targetNamespace="http://xmlns.oracle.com/Pedido"
+			xmlns="http://www.w3.org/2001/XMLSchema">
+			<element name="PedidoProcessRequest">
+				<complexType>
+					<sequence>
+          	<element name="vinhos">
+              <complexType>
+                <sequence>
+                  <element name="vinho" maxOccurs="unbounded">
+                    <complexType>
+                      <sequence>
+                        <element name="vinhoId" type="int"/>
+                        <element name="qtde" type="int"/>
+                      </sequence>
+                    </complexType>
+                  </element>
+                </sequence>
+              </complexType>
+            </element>
+						<element name="cnpj" type="string" minOccurs="0"/>
+            <element name="senha" type="string" minOccurs="0"/>
+            <element name="cpf" type="string" minOccurs="0"/>
+            <element name="nomePF" type="string" minOccurs="0"/>
+            <element name="cartaoPF" type="string" minOccurs="0"/>
+            <element name="enderecoPF" type="string" minOccurs="0"/>
+            <element name="qtdeTotalVinho" type="int"/> 
+            <element name="valorTotal" type="double"/>
+					</sequence>
+				</complexType>
+			</element>
+			<element name="PedidoProcessResponse">
+				<complexType>
+					<sequence>
+						<element name="result" type="string"/>
+					</sequence>
+				</complexType>
+			</element>
+		</schema>
+	</types>
+	<message name="PedidoRequestMessage">
+		<part name="payload" element="client:PedidoProcessRequest"/>
+	</message>
+	<message name="PedidoResponseMessage">
+		<part name="payload" element="client:PedidoProcessResponse"/>
+	</message>
+	<portType name="Pedido">
+		<operation name="process">
+			<input  message="client:PedidoRequestMessage" />
+			<output message="client:PedidoResponseMessage"/>
+		</operation>
+	</portType>
+	<plnk:partnerLinkType name="Pedido">
+		<plnk:role name="PedidoProvider">
+			<plnk:portType name="client:Pedido"/>
+		</plnk:role>
+	</plnk:partnerLinkType>
+</definitions>

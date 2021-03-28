@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="http://ipt.br/soa/ext" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" targetNamespace="http://ipt.br/soa/ext" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://ipt.br/soa/ext">
+      <s:element name="Creditar">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="cartaoId" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="valor" type="s:double" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="CreditarResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="CreditarResult" type="s:boolean" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="Debitar">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="cartaoId" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="valor" type="s:double" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="DebitarResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="DebitarResult" type="s:boolean" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+    </s:schema>
+  </wsdl:types>
+  <wsdl:message name="CreditarSoapIn">
+    <wsdl:part name="parameters" element="tns:Creditar" />
+  </wsdl:message>
+  <wsdl:message name="CreditarSoapOut">
+    <wsdl:part name="parameters" element="tns:CreditarResponse" />
+  </wsdl:message>
+  <wsdl:message name="DebitarSoapIn">
+    <wsdl:part name="parameters" element="tns:Debitar" />
+  </wsdl:message>
+  <wsdl:message name="DebitarSoapOut">
+    <wsdl:part name="parameters" element="tns:DebitarResponse" />
+  </wsdl:message>
+  <wsdl:portType name="VisaSoap">
+    <wsdl:operation name="Creditar">
+      <wsdl:input message="tns:CreditarSoapIn" />
+      <wsdl:output message="tns:CreditarSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="Debitar">
+      <wsdl:input message="tns:DebitarSoapIn" />
+      <wsdl:output message="tns:DebitarSoapOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="VisaSoap" type="tns:VisaSoap">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="Creditar">
+      <soap:operation soapAction="http://ipt.br/soa/ext/Creditar" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Debitar">
+      <soap:operation soapAction="http://ipt.br/soa/ext/Debitar" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="VisaSoap12" type="tns:VisaSoap">
+    <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="Creditar">
+      <soap12:operation soapAction="http://ipt.br/soa/ext/Creditar" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Debitar">
+      <soap12:operation soapAction="http://ipt.br/soa/ext/Debitar" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="Visa">
+    <wsdl:port name="VisaSoap" binding="tns:VisaSoap">
+      <soap:address location="http://localhost:1709/ExternalServices/Visa.asmx" />
+    </wsdl:port>
+    <wsdl:port name="VisaSoap12" binding="tns:VisaSoap12">
+      <soap12:address location="http://localhost:1709/ExternalServices/Visa.asmx" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>
